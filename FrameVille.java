@@ -71,10 +71,11 @@ public class FrameVille extends JFrame implements ActionListener{
 
         tableVille.setFont(new Font("Arial", Font.PLAIN, 15));
         tableVille.setRowHeight(20);
+        tableVille.getTableHeader().setReorderingAllowed(false);
 
         JScrollPane scrollPane = new JScrollPane(tableVille);
         scrollPane.setPreferredSize(new Dimension(500, 200));
-
+        
         gbc.gridx = 0;
         gbc.gridy = 0;
         this.panelGauche.add(scrollPane, gbc);
@@ -120,6 +121,9 @@ public class FrameVille extends JFrame implements ActionListener{
         gbc2.gridy = 3;
         gbc2.gridwidth = 2;
         this.panelDroite.add(ajouterJButton, gbc2);
+
+        this.ajouterJButton.addActionListener( this );
+
     
         this.add(panelGauche, BorderLayout.WEST);
         this.add(panelDroite, BorderLayout.EAST);
@@ -132,7 +136,14 @@ public class FrameVille extends JFrame implements ActionListener{
 
     public void actionPerformed(ActionEvent e)
     {
-
+        if(e.getSource() == this.ajouterJButton)
+        {
+            String nom = nomJTextField.getText();
+            int x = Integer.parseInt(xJTextField.getText());
+            int y = Integer.parseInt(yJTextField.getText());
+            this.listVille.add(new Ville(nom, x, y));
+            
+        }
     }
 
     public static void main(String[] args) {
