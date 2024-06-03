@@ -25,6 +25,7 @@ public class Ville {
     public int getY                      () { return this.y; }
     public int getNumVille               () { return this.numVille; }
     public ArrayList<Route> getListeRoute() { return this.listeRoute; } 
+    public Ville getVille() { return this; }
 
     public void setNom  (String nom) { if(nom != null && nom != this.nom) this.nom = nom; }
     public void setX    (int x)      { if(x >= 0 && x <= 1000) this.x = x; }
