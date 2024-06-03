@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Ville {
 
     private static int nbVille = 0;
@@ -5,7 +7,7 @@ public class Ville {
     private String nom;
     private int x;
     private int y;
-    private Route[] listeRoute;
+    private ArrayList<Route> listeRoute;
 
     public Ville(String nom, int x, int y)
     {
@@ -22,5 +24,15 @@ public class Ville {
     public int getX() { return this.x; }
     public int getY() { return this.y; }
     public int getNumVille() { return this.numVille; }
-    // public Route[] getListeRoute { return this.listeRoute; }    
+    public ArrayList<Route> getListeRoute() { return this.listeRoute; } 
+    
+    public boolean ajouterRoute(Route route)
+    {
+        if(route != null)
+        {
+            this.listeRoute.add(route);
+            return true;
+        }
+        return false;
+    }
 }
