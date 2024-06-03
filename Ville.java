@@ -35,4 +35,14 @@ public class Ville {
         }
         return false;
     }
+
+    public boolean supprimerRoute(Route route)
+    {
+        if(route != null)
+        {
+            this.listeRoute.remove(route);
+            return true;
+        }
+        return false;
+    }
 }
