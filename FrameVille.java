@@ -1,8 +1,15 @@
 import javax.swing.*;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class FrameVille extends JFrame{
+
+    private JTable tableVille;
+    private String[] nomCol = { "Numéro", "Nom", "X", "Y"};
+    private String[][] model;
+
+    private ArrayList<Ville> listVille;
 
     private JLabel nomJLabel;
     private JLabel xJLabel;
@@ -13,15 +20,15 @@ public class FrameVille extends JFrame{
     private JTextField yJTextField;
     private JButton validerJButton;
 
+
     public FrameVille()
     {
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setTitle("Ajouter Ville");
+        this.setTitle("Ville");
         this.setLocation(10, 10);
 
         //Layout de la frame
-        this.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
+        this.setLayout(new GridLayout(1, 2));
 
         //Initialisation Label
         this.nomJLabel = new JLabel("nom : ");
@@ -34,41 +41,14 @@ public class FrameVille extends JFrame{
         this.yJTextField = new JTextField(6);
 
         //Initialisation Button
-        this.validerJButton = new JButton("Valider");
+        this.validerJButton = new JButton("Ajouter");
 
-        //Ajout des composants 
-        Insets insets = new Insets(10, 10, 10, 5);
-        
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 1;
-        gbc.insets = insets;
-        this.add(nomJLabel, gbc);
+        //Initialisation Table
+        this.listVille = new ArrayList<>();
+        this.model = new String[listVille.size()][4];
+        for(int i = 0; i < 4; i++)
 
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        this.add(nomJTextField, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        this.add(xJLabel, gbc);
-
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        this.add(xJTextField, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        this.add(yJLabel, gbc);
-
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-        this.add(yJTextField, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.gridwidth = 2;
-        this.add(validerJButton, gbc);
 
         this.pack();
         this.setVisible(true);
