@@ -29,11 +29,11 @@ public class FrameVille extends JFrame implements ActionListener{
     private JButton modifierJButton;
 
 
-    public FrameVille()
+    public FrameVille(int x, int y)
     {
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setTitle("Ville");
-        this.setLocation(10, 10);
+        this.setLocation(x, y);
         this.setSize(600, 300);
         this.setLayout(new BorderLayout());
 
@@ -153,9 +153,5 @@ public class FrameVille extends JFrame implements ActionListener{
                 v.getY()
             });
         }
-    }
-
-    public static void main(String[] args) {
-        new FrameVille();
     }
 }
