@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import java.awt.*;
@@ -10,7 +11,7 @@ public class FrameVille extends JFrame implements ActionListener{
 
     private JTable tableVille;
     private String[] nomCol = { "Numéro", "Nom", "X", "Y"};
-    private String[][] modelTable;
+    private DefaultTableModel modelTable;
 
     private ArrayList<Ville> listVille;
 
@@ -57,16 +58,18 @@ public class FrameVille extends JFrame implements ActionListener{
 
         this.listVille = new ArrayList<>();
         this.listVille.add(new Ville("test", 1, 1));
-        this.modelTable = new String[this.listVille.size()][4];
-        for(int i = 0; i < listVille.size(); i++)
-        {
-            this.modelTable[i][0] = String.valueOf(this.listVille.get(i).getNumVille());
-            this.modelTable[i][1] = this.listVille.get(i).getNom();
-            this.modelTable[i][2] = String.valueOf(this.listVille.get(i).getX());
-            this.modelTable[i][3] = String.valueOf(this.listVille.get(i).getY());
+
+        this.modelTable = new DefaultTableModel(nomCol, 0);
+        for (Ville ville : listVille) {
+            this.modelTable.addRow(new Object[]{
+                ville.getNumVille(),
+                ville.getNom(),
+                ville.getX(),
+                ville.getY()
+            });
         }
 
-        this.tableVille = new JTable(modelTable, nomCol);
+        this.tableVille = new JTable(modelTable);
         this.add(tableVille);
 
         tableVille.setFont(new Font("Arial", Font.PLAIN, 15));
@@ -123,7 +126,7 @@ public class FrameVille extends JFrame implements ActionListener{
         this.panelDroite.add(ajouterJButton, gbc2);
 
         this.ajouterJButton.addActionListener( this );
-
+        this.modifierJButton.addActionListener( this );
     
         this.add(panelGauche, BorderLayout.WEST);
         this.add(panelDroite, BorderLayout.EAST);
@@ -141,8 +144,26 @@ public class FrameVille extends JFrame implements ActionListener{
             String nom = nomJTextField.getText();
             int x = Integer.parseInt(xJTextField.getText());
             int y = Integer.parseInt(yJTextField.getText());
-            this.listVille.add(new Ville(nom, x, y));
+            Ville v = new Ville(nom, x, y);
+            this.listVille.add(v);
             
+            this.modelTable.addRow(new Object[]{
+                v.getNumVille(),
+                v.getNom(),
+                v.getX(),
+                v.getY()
+            });
+        }
+
+        if(e.getSource() == this.modifierJButton)
+        {
+            int x = 0;
+            int y = 0;
+
+            int newX = this.tableVille.getEditingColumn();
+            int newY = this.tableVille.getEditingRow();
+
+            System.out.println(this.tableVille.getValueAt(newX, newY));
         }
     }
 
