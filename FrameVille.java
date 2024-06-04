@@ -143,15 +143,19 @@ public class FrameVille extends JFrame implements ActionListener{
             String nom = nomJTextField.getText();
             int x = Integer.parseInt(xJTextField.getText());
             int y = Integer.parseInt(yJTextField.getText());
-            Ville v = new Ville(nom, x, y);
-            this.listVille.add(v);
             
-            this.modelTable.addRow(new Object[]{
-                v.getNumVille(),
-                v.getNom(),
-                v.getX(),
-                v.getY()
-            });
+            if(nom != null && (x > 0 && x < 1000) && (y > 0 && y < 800))
+            {
+                Ville v = new Ville(nom, x, y);
+                this.listVille.add(v);
+            
+                this.modelTable.addRow(new Object[]{
+                    v.getNumVille(),
+                    v.getNom(),
+                    v.getX(),
+                    v.getY()
+                });
+            }
         }
     }
 }
