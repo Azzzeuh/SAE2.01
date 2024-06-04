@@ -1,6 +1,5 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -153,17 +152,6 @@ public class FrameVille extends JFrame implements ActionListener{
                 v.getX(),
                 v.getY()
             });
-        }
-
-        if(e.getSource() == this.modifierJButton)
-        {
-            int x = 0;
-            int y = 0;
-
-            int newX = this.tableVille.getEditingColumn();
-            int newY = this.tableVille.getEditingRow();
-
-            System.out.println(this.tableVille.getValueAt(newX, newY));
         }
     }
 
