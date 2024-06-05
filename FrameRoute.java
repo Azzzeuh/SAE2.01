@@ -33,8 +33,6 @@ public class FrameRoute extends JFrame implements ActionListener
 	private JPanel panelGauche;
 	private JPanel panelDroite;
 
-	private Ville[] array;
-
 	/*--------------*/
 	/* Instructions */
 	/*--------------*/
@@ -52,11 +50,8 @@ public class FrameRoute extends JFrame implements ActionListener
 
 		//Initialisation Liste des Ville et des Route
 		this.listVille = new ArrayList<>();
-		Ville v1 = new Ville("test", 1, 1);
-		Ville v2 = new Ville("test2", 2, 15);
-		this.listVille.add(v1);
-		this.listVille.add(v2);
-		array = listVille.toArray(new Ville[listVille.size()]);
+		this.listVille.add(new Ville("test", 1, 1));
+		this.listVille.add(new Ville("test2", 2, 15));
 
 		this.listRoute = new ArrayList<>();
 
@@ -67,23 +62,26 @@ public class FrameRoute extends JFrame implements ActionListener
 		this.departJLabel    = new JLabel("Ville de départ"   );
 		this.arriverJLabel   = new JLabel("Ville d'arrivé"    );
 
+		
 		// Initialisation des ComboBox
 		this.departJComboBox  = new JComboBox();
 		this.arriverJComboBox = new JComboBox();
-		for (Ville item : listVille)
+		if (listVille.isEmpty() == false)
 		{
-			String nom = item.getNom();
+			for (Ville item : listVille)
+			{
+				String nom = item.getNom();
 
-			departJComboBox.addItem(nom);
-			arriverJComboBox.addItem(nom);
+				departJComboBox.addItem(nom);
+				arriverJComboBox.addItem(nom);
+			}
 		}
 
 		//Initialisation du TextField
-		this.tronconsJTextField = new JTextField(11);
+		this.tronconsJTextField = new JTextField(6);
 
 		//Initialisation du Boutton
 		this.validerJButton = new JButton("Valider");
-
 
 
 		//Initialisation du Tableau
@@ -93,8 +91,8 @@ public class FrameRoute extends JFrame implements ActionListener
 			this.modelTable.addRow(new Object[]
 			{
 				route.getNbTroncons(),
-				route.getVilleDepart(),
-				route.getVilleArriver()
+				route.getVilleDepart().getNom(),
+				route.getVilleArriver().getNom()
 			});
 		}
 
@@ -107,7 +105,6 @@ public class FrameRoute extends JFrame implements ActionListener
 
 		JScrollPane scrollPane = new JScrollPane(tableRoute);
 		scrollPane.setPreferredSize(new Dimension(500, 200));
-
 
 
 		// Ajout des Composants
@@ -169,22 +166,36 @@ public class FrameRoute extends JFrame implements ActionListener
 
 	public void actionPerformed(ActionEvent e)
 	{
+
 		if(e.getSource() == this.validerJButton)
 		{
-			int   nbTroncons  = Integer.parseInt(tronconsJTextField.getText());
-			Ville depart      = new Ville("test3", 4 , 20); // listeVille avec le num
-			Ville arriver     = new Ville("test", 1, 1);
-			Route r = new Route(nbTroncons, depart, arriver);
-			//depart.ajouterRoute(r);
-			//arriver.ajouterRoute(r);
-			this.listRoute.add(r);
+			Ville depart  = null;
+			Ville arriver = null;
 
-			this.modelTable.addRow(new Object[]{
-				r.getNbTroncons(),
-				r.getVilleDepart().getNom(),
-				r.getVilleArriver().getNom(),
-			});
+			int nbTroncons  = Integer.parseInt(tronconsJTextField.getText());
+			for(Ville ville : listVille)
+			{
+				if(ville.getNom() == departJComboBox.getSelectedItem())  { depart  = ville; }
+				if(ville.getNom() == arriverJComboBox.getSelectedItem()) { arriver = ville; }
+			}
+
+				Route r = Route.creerRoute(nbTroncons, depart, arriver);
+				//depart.ajouterRoute(r);
+				//arriver.ajouterRoute(r);
+				this.listRoute.add(r);
+
+				this.modelTable.addRow(new Object[]{
+					r.getNbTroncons(),
+					r.getVilleDepart().getNom(),
+					r.getVilleArriver().getNom(),
+				});
+
 		}
 	}
+
+	public ArrayList<Ville> getListVille() { return listVille; }
+	public ArrayList<Route> getListRoute() { return listRoute; }
+
+	public static void main(String[] arg)
 
 }
