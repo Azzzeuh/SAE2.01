@@ -196,6 +196,5 @@ public class FrameRoute extends JFrame implements ActionListener
 	public ArrayList<Ville> getListVille() { return listVille; }
 	public ArrayList<Route> getListRoute() { return listRoute; }
 
-	public static void main(String[] arg)
 
 }
