@@ -39,13 +39,13 @@ public class FrameRoute extends JFrame implements ActionListener
 	/* Instructions */
 	/*--------------*/
 
-	public FrameRoute()
+	public FrameRoute(int x, int y)
 	{
 
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setSize(600, 300);
 		this.setTitle ("Ajouter Routes");
-		this.setLocation(10, 10);
+		this.setLocation(x, y);
 		this.setLayout(new BorderLayout());
 
 
@@ -185,11 +185,6 @@ public class FrameRoute extends JFrame implements ActionListener
 				r.getVilleArriver().getNom(),
 			});
 		}
-	}
-
-	public static void main(String[] a)
-	{
-		new FrameRoute();
 	}
 
 }
