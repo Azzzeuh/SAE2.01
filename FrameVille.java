@@ -150,7 +150,8 @@ public class FrameVille extends JFrame implements ActionListener{
 
                 if (frameRoute != null) 
                 {
-                    frameRoute.MisAJourComboBox(listVille);
+                    frameRoute.MisAJourListVille(this.listVille);
+                    frameRoute.MisAJourComboBox(this.listVille);
                 }
             }
         }
