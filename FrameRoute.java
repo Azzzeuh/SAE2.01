@@ -25,35 +25,33 @@ public class FrameRoute extends JFrame implements ActionListener
 
 	private JTextField tronconsJTextField;
 
-	private JComboBox departJComboBox;
-	private JComboBox arriverJComboBox;
+	private JComboBox<String> departJComboBox;
+	private JComboBox<String> arriverJComboBox;
 
 	private JButton validerJButton;
 
 	private JPanel panelGauche;
 	private JPanel panelDroite;
 
+	private FrameVille frameVille;
+
 	/*--------------*/
 	/* Instructions */
 	/*--------------*/
 
-	public FrameRoute(int x, int y)
+	public FrameRoute(int x, int y, ArrayList<Ville> listVille)
 	{
 
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setSize(600, 300);
-		this.setTitle ("Route");
+		this.setTitle ("Ajouter Route");
 		this.setLocation(x, y);
 		this.setLayout(new BorderLayout());
 
 
 		//Initialisation Liste des Ville et des Route
-		this.listVille = new ArrayList<>();
-		this.listVille.add(new Ville("test",  1,  1));
-		this.listVille.add(new Ville("test2", 2, 15));
-
+		this.listVille = listVille != null ? listVille : new ArrayList<>();
 		this.listRoute = new ArrayList<>();
-
 
 		// Initialisation des Label
 		this.tronconsJLabel  = new JLabel("Nombre de tronçons");
@@ -64,19 +62,10 @@ public class FrameRoute extends JFrame implements ActionListener
 		// Initialisation des ComboBox
 		this.departJComboBox  = new JComboBox();
 		this.arriverJComboBox = new JComboBox();
-		if (listVille.isEmpty() == false)
-		{
-			for (Ville item : listVille)
-			{
-				String nom = item.getNom();
-
-				departJComboBox.addItem(nom);
-				arriverJComboBox.addItem(nom);
-			}
-		}
+		MisAJourComboBox(this.listVille);
 
 		//Initialisation du TextField
-		this.tronconsJTextField = new JTextField(6);
+		this.tronconsJTextField = new JTextField(11);
 
 		//Initialisation du Boutton
 		this.validerJButton = new JButton("Valider");
@@ -84,16 +73,6 @@ public class FrameRoute extends JFrame implements ActionListener
 
 		//Initialisation du Tableau
 		this.modelTable = new DefaultTableModel(nomCol, 0);
-		for (Route route : listRoute)
-		{
-			this.modelTable.addRow(new Object[]
-			{
-				route.getNbTroncons(),
-				route.getVilleDepart().getNom(),
-				route.getVilleArriver().getNom()
-			});
-		}
-
 		this.tableRoute = new JTable(modelTable);
 		this.add(tableRoute);
 
@@ -103,7 +82,6 @@ public class FrameRoute extends JFrame implements ActionListener
 
 		JScrollPane scrollPane = new JScrollPane(tableRoute);
 		scrollPane.setPreferredSize(new Dimension(500, 200));
-
 
 		// Ajout des Composants
 
@@ -161,38 +139,66 @@ public class FrameRoute extends JFrame implements ActionListener
 		this.setVisible(true);
 	}
 
+	public void MisAJourComboBox(ArrayList<Ville> listVille)
+	{
+		departJComboBox.removeAllItems();
+		arriverJComboBox.removeAllItems();
+		for(Ville v : listVille)
+		{
+			departJComboBox.addItem(v.getNom());
+			arriverJComboBox.addItem(v.getNom());
+		}
+	}
 
 	public void actionPerformed(ActionEvent e)
 	{
 
 		if(e.getSource() == this.validerJButton)
 		{
-			Ville depart  = null;
-			Ville arriver = null;
+			int troncons = Integer.parseInt(tronconsJTextField.getText());
+			String villeDepart = (String) departJComboBox.getSelectedItem();
+            String villeArriver = (String) arriverJComboBox.getSelectedItem();
 
-			int nbTroncons  = Integer.parseInt(tronconsJTextField.getText());
-			for(Ville ville : listVille)
-			{
-				if(ville.getNom() == departJComboBox.getSelectedItem())  { depart  = ville; }
-				if(ville.getNom() == arriverJComboBox.getSelectedItem()) { arriver = ville; }
+			System.out.println();
+            Ville depart = null;
+            Ville arriver = null;
+	
+
+			for(int i = 0; i < this.listVille.size(); i++)
+            {
+				Ville v = this.listVille.get(i);
+				System.out.println(v.getNom());
+                if (v.getNom().equals(villeDepart)) {
+                    depart = v;
+                }
+                if (v.getNom().equals(villeArriver)) {
+                    arriver = v;
+                }
+            }
+
+			System.out.println("Ville de départ: " + villeDepart);
+			System.out.println("Ville d'arrivée: " + villeArriver);
+			System.out.println("Nombre de tronçons: " + troncons);
+			System.out.println("Objet ville de départ: " + depart);
+			System.out.println("Objet ville d'arrivée: " + arriver);
+
+            if (depart != null && arriver != null && troncons > 0) {
+                Route route = new Route(troncons, depart, arriver);
+                listRoute.add(route);
+
+                modelTable.addRow(new Object[]{
+                    route.getNbTroncons(),
+                    route.getVilleDepart().getNom(),
+                    route.getVilleArriver().getNom()
+                });
 			}
-
-				Route r = Route.creerRoute(nbTroncons, depart, arriver);
-				//depart.ajouterRoute(r);
-				//arriver.ajouterRoute(r);
-				this.listRoute.add(r);
-
-				this.modelTable.addRow(new Object[]{
-					r.getNbTroncons(),
-					r.getVilleDepart().getNom(),
-					r.getVilleArriver().getNom(),
-				});
-
 		}
 	}
 
-	public ArrayList<Ville> getListVille() { return listVille; }
-	public ArrayList<Route> getListRoute() { return listRoute; }
+	public void setFrameVille(FrameVille frameVille)
+	{
+		this.frameVille = frameVille;
+	}
 
 
 }

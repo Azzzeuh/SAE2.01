@@ -28,9 +28,11 @@ public class FrameVille extends JFrame implements ActionListener{
     private JButton ajouterJButton;
     private JButton modifierJButton;
 
+    private FrameRoute frameRoute;
 
-    public FrameVille(int x, int y)
+    public FrameVille(int x, int y, FrameRoute frameRoute)
     {
+        this.frameRoute = frameRoute;
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setTitle("Ville");
         this.setLocation(x, y);
@@ -56,17 +58,9 @@ public class FrameVille extends JFrame implements ActionListener{
         GridBagConstraints gbc = new GridBagConstraints();
 
         this.listVille = new ArrayList<>();
-        this.listVille.add(new Ville("test", 1, 1));
 
         this.modelTable = new DefaultTableModel(nomCol, 0);
-        for (Ville ville : listVille) {
-            this.modelTable.addRow(new Object[]{
-                ville.getNumVille(),
-                ville.getNom(),
-                ville.getX(),
-                ville.getY()
-            });
-        }
+        
 
         this.tableVille = new JTable(modelTable);
         this.add(tableVille);
@@ -134,8 +128,6 @@ public class FrameVille extends JFrame implements ActionListener{
         this.setVisible(true);
     }
 
-    public ArrayList<Ville> getListVille() { return listVille; }
-
     public void actionPerformed(ActionEvent e)
     {
         if(e.getSource() == this.ajouterJButton)
@@ -155,7 +147,14 @@ public class FrameVille extends JFrame implements ActionListener{
                     v.getX(),
                     v.getY()
                 });
+
+                if (frameRoute != null) 
+                {
+                    frameRoute.MisAJourComboBox(listVille);
+                }
             }
         }
     }
+
+    public ArrayList<Ville> getListVille() { return listVille; }
 }

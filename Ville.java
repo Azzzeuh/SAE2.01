@@ -20,12 +20,12 @@ public class Ville {
         }
     }
 
-    public String getNom                 () { return this.nom; }
-    public int getX                      () { return this.x; }
-    public int getY                      () { return this.y; }
-    public int getNumVille               () { return this.numVille; }
+    public String           getNom       () { return this.nom; }
+    public int              getX         () { return this.x; }
+    public int              getY         () { return this.y; }
+    public int              getNumVille  () { return this.numVille; }
     public ArrayList<Route> getListeRoute() { return this.listeRoute; } 
-    public Ville getVille() { return this; }
+    public Ville            getVille     () { return this; }
 
     public void setNom  (String nom) { if(nom != null && nom != this.nom) this.nom = nom; }
     public void setX    (int x)      { if(x >= 0 && x <= 1000) this.x = x; }

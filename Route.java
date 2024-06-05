@@ -14,7 +14,7 @@ public class Route {
 	}
 
 
-	private Route(int nbTroncons, Ville villeDepart, Ville villeArriver)
+	public Route(int nbTroncons, Ville villeDepart, Ville villeArriver)
 	{
 		this.nbTroncons   = nbTroncons;
 		this.villeDepart  = villeDepart;
