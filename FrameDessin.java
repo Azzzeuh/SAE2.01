@@ -5,6 +5,7 @@ public class FrameDessin extends JFrame {
 
     FrameVille frameVille;
     FrameRoute frameRoute;
+    PanelDessin panelDessin;
 
     public FrameDessin( Controleur ctrl ) {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -13,12 +14,16 @@ public class FrameDessin extends JFrame {
         this.setSize(1000, 800);
 
         frameRoute = new FrameRoute(this.getWidth() + (int) this.getLocation().getX() + 30, 400, null);
-        frameVille = new FrameVille(this.getWidth() + (int) this.getLocation().getX() + 30, + 100, frameRoute);
+        frameVille = new FrameVille(this.getWidth() + (int) this.getLocation().getX() + 30, + 100, frameRoute, this);
 
         frameRoute.setFrameVille(frameVille);
 
-        this.add( new PanelDessin( ctrl ));
+        panelDessin = new PanelDessin( ctrl );
+    
+        this.add(panelDessin);
 
         this.setVisible(true);
     }
+
+    public PanelDessin getPanelDessin() { return this.panelDessin; }
 }

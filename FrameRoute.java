@@ -164,15 +164,21 @@ public class FrameRoute extends JFrame implements ActionListener
             Ville depart = listVille.get(departJComboBox.getSelectedIndex());
             Ville arriver = listVille.get(arriverJComboBox.getSelectedIndex());
             
-            Route route = new Route(troncons, depart, arriver);
-            listRoute.add(route);
-
-            modelTable.addRow(new Object[]{
-                route.getNbTroncons(),
-                route.getVilleDepart().getNom(),
-                route.getVilleArriver().getNom()
-                });
+			if((troncons >= 1 && troncons <= 10) && depart != null && arriver != null) 
+			{
+				Route route = new Route(troncons, depart, arriver);
+            	listRoute.add(route);
 			
+				modelTable.addRow(new Object[]{
+					route.getNbTroncons(),
+					route.getVilleDepart().getNom(),
+					route.getVilleArriver().getNom()
+					});
+				
+				frameVille.ajouterRoute(troncons, depart, arriver);
+
+				frameVille.getPanelDessin().dessinerRoute(troncons, depart, arriver);
+			}
 		}
 	}
 

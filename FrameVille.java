@@ -29,12 +29,16 @@ public class FrameVille extends JFrame implements ActionListener{
     private JButton modifierJButton;
 
     private FrameRoute frameRoute;
+    private FrameDessin frameDessin;
+    private PanelDessin panelDessin;
 
-    public FrameVille(int x, int y, FrameRoute frameRoute)
+    public FrameVille(int x, int y, FrameRoute frameRoute, FrameDessin frameDessin)
     {
         this.frameRoute = frameRoute;
+        this.frameDessin = frameDessin;
+        this.panelDessin = frameDessin.getPanelDessin();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setTitle("Ville");
+        this.setTitle("Ajouter Ville");
         this.setLocation(x, y);
         this.setSize(600, 300);
         this.setLayout(new BorderLayout());
@@ -132,15 +136,25 @@ public class FrameVille extends JFrame implements ActionListener{
     {
         if(e.getSource() == this.ajouterJButton)
         {
-            String nom = nomJTextField.getText();
-            int x = Integer.parseInt(xJTextField.getText());
-            int y = Integer.parseInt(yJTextField.getText());
-            
+            String nom = "";
+            int x = -1;
+            int y = -1;
+    
+            if( nomJTextField.getText() != null &&
+                  xJTextField.getText() != null &&
+                  yJTextField.getText() != null )
+            {
+                nom = nomJTextField.getText();
+                x = Integer.parseInt(xJTextField.getText());
+                y = Integer.parseInt(yJTextField.getText());
+            }
             if(nom != null && (x > 0 && x < 1000) && (y > 0 && y < 800))
             {
                 Ville v = new Ville(nom, x, y);
                 this.listVille.add(v);
             
+                frameDessin.getPanelDessin().dessinerVille(x, y, nom);
+
                 this.modelTable.addRow(new Object[]{
                     v.getNumVille(),
                     v.getNom(),
@@ -158,4 +172,14 @@ public class FrameVille extends JFrame implements ActionListener{
     }
 
     public ArrayList<Ville> getListVille() { return listVille; }
+    public void setFrameDessin(FrameDessin frameDessin) { this.frameDessin = frameDessin; }
+
+    public void ajouterRoute(int troncons, Ville villeDepart, Ville villeArrivee) {
+        frameDessin.getPanelDessin().dessinerRoute(troncons, villeDepart, villeArrivee);
+    }
+
+    public PanelDessin getPanelDessin()
+    {
+        return panelDessin;
+    }
 }
