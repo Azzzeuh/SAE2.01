@@ -42,19 +42,17 @@ public class FrameRoute extends JFrame implements ActionListener
 
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setSize(600, 300);
-		this.setTitle ("Ajouter Routes");
+		this.setTitle ("Route");
 		this.setLocation(x, y);
 		this.setLayout(new BorderLayout());
 
 
-
 		//Initialisation Liste des Ville et des Route
 		this.listVille = new ArrayList<>();
-		this.listVille.add(new Ville("test", 1, 1));
+		this.listVille.add(new Ville("test",  1,  1));
 		this.listVille.add(new Ville("test2", 2, 15));
 
 		this.listRoute = new ArrayList<>();
-
 
 
 		// Initialisation des Label
@@ -62,7 +60,7 @@ public class FrameRoute extends JFrame implements ActionListener
 		this.departJLabel    = new JLabel("Ville de départ"   );
 		this.arriverJLabel   = new JLabel("Ville d'arrivé"    );
 
-		
+
 		// Initialisation des ComboBox
 		this.departJComboBox  = new JComboBox();
 		this.arriverJComboBox = new JComboBox();
