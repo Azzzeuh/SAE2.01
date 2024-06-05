@@ -1,6 +1,10 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList; 
 
 public class FrameRoute extends JFrame implements ActionListener
 {
@@ -8,11 +12,12 @@ public class FrameRoute extends JFrame implements ActionListener
 	/* Variables    */
 	/*--------------*/
 
-	private JTable tableVille;
-	private String[] nomCol = {"Ville de départ", "Ville d'arriver", "Nombre de tronçons"};
-	private String[][] modelTable;
+	private JTable tableRoute;
+	private String[] nomCol = {"Nombre de tronçons", "Ville de départ", "Ville d'arriver"};
+	private DefaultTableModel modelTable;
 
-	private ArrayList<Ville> listeVille;
+	private ArrayList<Ville> listVille;
+	private ArrayList<Route> listRoute;
 
 	private JLabel tronconsJLabel;
 	private JLabel departJLabel;
@@ -20,17 +25,15 @@ public class FrameRoute extends JFrame implements ActionListener
 
 	private JTextField tronconsJTextField;
 
-	private JComboBox<Ville> departJComboBox;
-	private JComboBox<Ville> arriverJComboBox;
+	private JComboBox departJComboBox;
+	private JComboBox arriverJComboBox;
 
 	private JButton validerJButton;
 
 	private JPanel panelGauche;
 	private JPanel panelDroite;
 
-	private int   nbTroncons;
-	private Ville villeDepart;
-	private Ville villeArriver;
+	private Ville[] array;
 
 	/*--------------*/
 	/* Instructions */
@@ -45,10 +48,17 @@ public class FrameRoute extends JFrame implements ActionListener
 		this.setLocation(10, 10);
 		this.setLayout(new BorderLayout());
 
-		this.setLayout(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
 
-		this.setVisible(true);
+
+		//Initialisation Liste des Ville et des Route
+		this.listVille = new ArrayList<>();
+		Ville v1 = new Ville("test", 1, 1);
+		Ville v2 = new Ville("test2", 2, 15);
+		this.listVille.add(v1);
+		this.listVille.add(v2);
+		array = listVille.toArray(new Ville[listVille.size()]);
+
+		this.listRoute = new ArrayList<>();
 
 
 
@@ -58,8 +68,15 @@ public class FrameRoute extends JFrame implements ActionListener
 		this.arriverJLabel   = new JLabel("Ville d'arrivé"    );
 
 		// Initialisation des ComboBox
-		this.departJComboBox = new JComboBox<Ville>(this.listeVille);
-		this.arriverJComboBox = new JComboBox<Ville>(this.listeVille);
+		this.departJComboBox  = new JComboBox();
+		this.arriverJComboBox = new JComboBox();
+		for (Ville item : listVille)
+		{
+			String nom = item.getNom();
+
+			departJComboBox.addItem(nom);
+			arriverJComboBox.addItem(nom);
+		}
 
 		//Initialisation du TextField
 		this.tronconsJTextField = new JTextField(11);
@@ -67,74 +84,108 @@ public class FrameRoute extends JFrame implements ActionListener
 		//Initialisation du Boutton
 		this.validerJButton = new JButton("Valider");
 
-		this.panelGauche = new JPanel(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
 
-		this.listVille = new ArrayList<>();
-		this.listVille.add(new Ville("test", 1, 1));
-		this.modelTable = new String[this.listVille.size()][4];
-		for(int i = 0; i < listVille.size(); i++)
+
+		//Initialisation du Tableau
+		this.modelTable = new DefaultTableModel(nomCol, 0);
+		for (Route route : listRoute)
 		{
-			this.modelTable[i][0] = String.valueOf(this.listVille.get(i).getNumVille());
-			this.modelTable[i][1] = this.listVille.get(i).getNom();
-			this.modelTable[i][2] = String.valueOf(this.listVille.get(i).getX());
-			this.modelTable[i][3] = String.valueOf(this.listVille.get(i).getY());
+			this.modelTable.addRow(new Object[]
+			{
+				route.getNbTroncons(),
+				route.getVilleDepart(),
+				route.getVilleArriver()
+			});
 		}
+
+		this.tableRoute = new JTable(modelTable);
+		this.add(tableRoute);
+
+		tableRoute.setFont(new Font("Arial", Font.PLAIN, 15));
+		tableRoute.setRowHeight(20);
+		tableRoute.getTableHeader().setReorderingAllowed(false);
+
+		JScrollPane scrollPane = new JScrollPane(tableRoute);
+		scrollPane.setPreferredSize(new Dimension(500, 200));
+
 
 
 		// Ajout des Composants
-		Insets insets = new Insets(10, 10, 10, 5);
+
+		// Panel Gauche
+		this.panelGauche = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
 
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		gbc.gridwidth = 1;
-		gbc.insets = insets;
-		this.add(tronconsJLabel, gbc);
+		this.panelGauche.add(scrollPane, gbc);
 
-		gbc.gridx = 1;
-		gbc.gridy = 0;
-		this.add(tronconsJTextField, gbc);
+		// Panel Droit
+		this.panelDroite = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc2 = new GridBagConstraints();
 
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		this.add(departJLabel, gbc);
+			// Ajout Troçons
+		gbc2.gridx = 0;
+		gbc2.gridy = 0;
+		this.panelDroite.add(tronconsJLabel, gbc2);
 
-		gbc.gridx = 1;
-		gbc.gridy = 1;
-		this.add(departJComboBox, gbc);
+		gbc2.gridx = 1;
+		gbc2.gridy = 0;
+		this.panelDroite.add(tronconsJTextField, gbc2);
 
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		this.add(arriverJLabel, gbc);
+			// Ajout Ville Départ
+		gbc2.gridx = 0;
+		gbc2.gridy = 1;
+		this.panelDroite.add(departJLabel, gbc2);
 
-		gbc.gridx = 1;
-		gbc.gridy = 2;
-		this.add(arriverJComboBox, gbc);
+		gbc2.gridx = 1;
+		gbc2.gridy = 1;
+		this.panelDroite.add(departJComboBox, gbc2);
 
-		gbc.gridx = 0;
-		gbc.gridy = 3;
-		gbc.gridwidth = 2;
-		this.add(validerJButton, gbc);
+			// Ajout Ville Arriver
+		gbc2.gridx = 0;
+		gbc2.gridy = 2;
+		this.panelDroite.add(arriverJLabel, gbc2);
+
+		gbc2.gridx = 1;
+		gbc2.gridy = 2;
+		this.panelDroite.add(arriverJComboBox, gbc2);
+
+			// Ajout Bouton Valider
+		gbc2.gridx = 0;
+		gbc2.gridy = 3;
+		gbc2.gridwidth = 2;
+		this.panelDroite.add(validerJButton, gbc2);
+
+		this.validerJButton.addActionListener( this );
+
+		this.add(panelGauche, BorderLayout.WEST);
+		this.add(panelDroite, BorderLayout.EAST);
 
 		this.pack();
 		this.setVisible(true);
 	}
 
-/*
-	public void itemStateChanged(ItemEvent e) 
+
+	public void actionPerformed(ActionEvent e)
 	{
-		// si l'état d'un combobox est modifiée 
-		switch (e.getSource()) {
-			case deparComboBox:
-				this.villeDepart = villeDepart.getSelectedItem();
-			case arriverComboBox:
-				this.villeArriver = villeArriver.getSelectedItem();
-			default:
-				this.villeDepart = null;
-				break;
-			}
+		if(e.getSource() == this.validerJButton)
+		{
+			int   nbTroncons  = Integer.parseInt(tronconsJTextField.getText());
+			Ville depart      = new Ville("test3", 4 , 20); // listeVille avec le num
+			Ville arriver     = new Ville("test", 1, 1);
+			Route r = new Route(nbTroncons, depart, arriver);
+			//depart.ajouterRoute(r);
+			//arriver.ajouterRoute(r);
+			this.listRoute.add(r);
+
+			this.modelTable.addRow(new Object[]{
+				r.getNbTroncons(),
+				r.getVilleDepart().getNom(),
+				r.getVilleArriver().getNom(),
+			});
+		}
 	}
-*/
 
 	public static void main(String[] a)
 	{
