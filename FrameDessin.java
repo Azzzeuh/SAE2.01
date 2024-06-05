@@ -6,7 +6,7 @@ public class FrameDessin extends JFrame {
     FrameVille frameVille;
     FrameRoute frameRoute;
 
-    public FrameDessin() {
+    public FrameDessin( Controleur ctrl ) {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("Réseau routier");
         this.setLocation(50, 100);
@@ -17,10 +17,8 @@ public class FrameDessin extends JFrame {
 
         frameRoute.setFrameVille(frameVille);
 
-        this.setVisible(true);
-    }
+        this.add( new PanelDessin( ctrl ));
 
-    public static void main(String[] args) {
-        new FrameDessin();
+        this.setVisible(true);
     }
 }
