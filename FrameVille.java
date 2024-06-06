@@ -166,20 +166,42 @@ public class FrameVille extends JFrame implements ActionListener{
                 {
                     frameRoute.MisAJourListVille(this.listVille);
                     frameRoute.MisAJourComboBox(this.listVille);
+
+                    frameDessin.getPanelDessin().setRouteList(frameRoute.getListRoute());
+                    
+                    frameDessin.getPanelDessin().redessinerRoute();
                 }
+            }
+        }
+
+        if(e.getSource() == this.modifierJButton)
+        {
+            int ligneSelectionner = tableVille.getSelectedRow();
+            if( ligneSelectionner != -1 )
+            {
+                Ville ville = listVille.get(ligneSelectionner);
+                ville.setNom(nomJTextField.getText());
+                ville.setX(Integer.parseInt(xJTextField.getText()));
+                ville.setY(Integer.parseInt(yJTextField.getText()));
+
+                modelTable.setValueAt(ville.getNom(), ligneSelectionner, 1);
+                modelTable.setValueAt(ville.getX(), ligneSelectionner, 2);
+                modelTable.setValueAt(ville.getY(), ligneSelectionner, 3);
+
+                panelDessin.repaint();
             }
         }
     }
 
-    public ArrayList<Ville> getListVille() { return listVille; }
+    public JTable getTableVille() { return this.tableVille; }
+    public ArrayList<Ville> getListVille  ()    { return listVille  ; }
+    public PanelDessin      getPanelDessin()    { return panelDessin; }
     public void setFrameDessin(FrameDessin frameDessin) { this.frameDessin = frameDessin; }
 
     public void ajouterRoute(int troncons, Ville villeDepart, Ville villeArrivee) {
         frameDessin.getPanelDessin().dessinerRoute(troncons, villeDepart, villeArrivee);
+        frameDessin.getPanelDessin().redessinerRoute();
     }
 
-    public PanelDessin getPanelDessin()
-    {
-        return panelDessin;
-    }
+    
 }

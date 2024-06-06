@@ -34,14 +34,14 @@ public class FrameRoute extends JFrame implements ActionListener
 	private JPanel panelDroite;
 
 	private FrameVille frameVille;
+	private PanelDessin panelDessin;
 
 	/*--------------*/
 	/* Instructions */
 	/*--------------*/
 
-	public FrameRoute(int x, int y, ArrayList<Ville> listVille)
+	public FrameRoute(int x, int y, ArrayList<Ville> listVille, PanelDessin panelDessin)
 	{
-
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setSize(600, 300);
 		this.setTitle ("Ajouter Route");
@@ -166,26 +166,37 @@ public class FrameRoute extends JFrame implements ActionListener
             
 			if((troncons >= 1 && troncons <= 10) && depart != null && arriver != null) 
 			{
-				Route route = new Route(troncons, depart, arriver);
-            	listRoute.add(route);
+				Route r = new Route(troncons, depart, arriver);
+            	listRoute.add(r);
 			
 				modelTable.addRow(new Object[]{
-					route.getNbTroncons(),
-					route.getVilleDepart().getNom(),
-					route.getVilleArriver().getNom()
+					r.getNbTroncons(),
+					r.getVilleDepart().getNom(),
+					r.getVilleArriver().getNom()
 					});
 				
-				frameVille.ajouterRoute(troncons, depart, arriver);
-
-				frameVille.getPanelDessin().dessinerRoute(troncons, depart, arriver);
+				if(frameVille != null)
+					frameVille.ajouterRoute(troncons, depart, arriver);
+				
+				panelDessin.setRouteList(listRoute);
+				panelDessin.redessinerRoute();
 			}
+			
 		}
+	}
+
+	public ArrayList<Route> getListRoute()
+	{
+		return listRoute;
 	}
 
 	public void setFrameVille(FrameVille frameVille)
 	{
 		this.frameVille = frameVille;
 	}
-
-
+	
+	public void setPanelDessin(PanelDessin panelDessin)
+	{
+		this.panelDessin = panelDessin;
+	}
 }

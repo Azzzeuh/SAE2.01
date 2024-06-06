@@ -13,13 +13,14 @@ public class FrameDessin extends JFrame {
         this.setLocation(50, 100);
         this.setSize(1000, 800);
 
-        frameRoute = new FrameRoute(this.getWidth() + (int) this.getLocation().getX() + 30, 400, null);
+        frameRoute = new FrameRoute(this.getWidth() + (int) this.getLocation().getX() + 30, 400, null, null);
         frameVille = new FrameVille(this.getWidth() + (int) this.getLocation().getX() + 30, + 100, frameRoute, this);
 
         frameRoute.setFrameVille(frameVille);
 
-        panelDessin = new PanelDessin( ctrl );
+        panelDessin = new PanelDessin( ctrl , frameVille, frameRoute);
     
+        frameRoute.setPanelDessin(panelDessin);
         this.add(panelDessin);
 
         this.setVisible(true);
