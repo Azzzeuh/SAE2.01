@@ -70,34 +70,46 @@ public class PanelDessin extends JPanel implements ActionListener, MouseListener
 		super.paintComponent(g);
 
         // Dessiner les routes avec les tronçons
-        for (Route route : routeList) 
+        for(Route route : routeList)
         {
-
             Ville villeDepart = route.getVilleDepart();
             Ville villeArrivee = route.getVilleArriver();
+            g.setColor(Color.BLACK);
 
-            int troncons = route.getNbTroncons();
-            double dx = (villeArrivee.getX() - villeDepart.getX()) / (double) troncons;
-            double dy = (villeArrivee.getY() - villeDepart.getY()) / (double) troncons;
-    
-            for (int i = 0; i < troncons - 1; i++) { 
-                int x1 = (int) (villeDepart.getX() + i * dx);
-                int y1 = (int) (villeDepart.getY() + i * dy);
-                int x2 = (int) (villeDepart.getX() + (i + 1) * dx * 0.9); 
-                int y2 = (int) (villeDepart.getY() + (i + 1) * dy * 0.9); 
-    
-                g.setColor(Color.BLACK);
+            int nbTroncons = route.getNbTroncons();
+            int espace = 10;
+		
+            int x1 = villeDepart.getX();
+            int y1 = villeDepart.getY();
+            int x2 = villeArrivee.getX();
+            int y2 = villeArrivee.getY();
+
+            double distanceTotale = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+            double longueurTotale = nbTroncons * 10 + (nbTroncons - 1) * espace;
+
+            // Si la longueur totale des segments et des espaces dépasse la distance totale
+            if (longueurTotale > distanceTotale) 
+            {
                 g.drawLine(x1, y1, x2, y2);
             }
-    
-            
-            int x1 = (int) (villeDepart.getX() + (troncons - 1) * dx);
-            int y1 = (int) (villeDepart.getY() + (troncons - 1) * dy);
-            int x2 = villeArrivee.getX(); 
-            int y2 = villeArrivee.getY(); 
-    
-            g.setColor(Color.BLACK);
-            g.drawLine(x1, y1, x2, y2);
+
+            else
+            {
+                double longueurSegment = (distanceTotale - (nbTroncons - 1) * espace) / nbTroncons;
+
+                for (int i = 0; i < nbTroncons; i++) 
+                {
+                    double t1 = (i * (longueurSegment + espace)) / distanceTotale;
+                    double t2 = ((i * (longueurSegment + espace)) + longueurSegment) / distanceTotale;
+
+                    int x1Segment = (int) (x1 + t1 * (x2 - x1));
+                    int y1Segment = (int) (y1 + t1 * (y2 - y1));
+                    int x2Segment = (int) (x1 + t2 * (x2 - x1));
+                    int y2Segment = (int) (y1 + t2 * (y2 - y1));
+
+                    g.drawLine(x1Segment, y1Segment, x2Segment, y2Segment);
+                }
+            }
         }
         // Dessiner ville
         for (Ville ville : villeList )
@@ -107,6 +119,7 @@ public class PanelDessin extends JPanel implements ActionListener, MouseListener
             g.setColor(Color.BLACK);
             g.drawOval(ville.getX() - 13, ville.getY() - 13, 26, 26);
             g.drawString(ville.getNom(), ville.getX() - 16, ville.getY() - 25);
+		g.drawString("x: " + ville.getX() + " y: " + ville.getY(), ville.getX() + 16, ville.getY() + 25);
         }
 
 	}
