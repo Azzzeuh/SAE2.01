@@ -1,12 +1,11 @@
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.List;
+
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
+
 
 public class PanelDessin extends JPanel implements ActionListener, MouseListener, MouseMotionListener
 {
@@ -70,15 +69,36 @@ public class PanelDessin extends JPanel implements ActionListener, MouseListener
 	{
 		super.paintComponent(g);
 
-        // Dessiner route
-        for(Route route : routeList)
+        // Dessiner les routes avec les tronçons
+        for (Route route : routeList) 
         {
+
             Ville villeDepart = route.getVilleDepart();
             Ville villeArrivee = route.getVilleArriver();
-            g.setColor(Color.BLACK);
-            g.drawLine(villeDepart.getX(), villeDepart.getY(), villeArrivee.getX(), villeArrivee.getY());
-        }
 
+            int troncons = route.getNbTroncons();
+            double dx = (villeArrivee.getX() - villeDepart.getX()) / (double) troncons;
+            double dy = (villeArrivee.getY() - villeDepart.getY()) / (double) troncons;
+    
+            for (int i = 0; i < troncons - 1; i++) { 
+                int x1 = (int) (villeDepart.getX() + i * dx);
+                int y1 = (int) (villeDepart.getY() + i * dy);
+                int x2 = (int) (villeDepart.getX() + (i + 1) * dx * 0.9); 
+                int y2 = (int) (villeDepart.getY() + (i + 1) * dy * 0.9); 
+    
+                g.setColor(Color.BLACK);
+                g.drawLine(x1, y1, x2, y2);
+            }
+    
+            
+            int x1 = (int) (villeDepart.getX() + (troncons - 1) * dx);
+            int y1 = (int) (villeDepart.getY() + (troncons - 1) * dy);
+            int x2 = villeArrivee.getX(); 
+            int y2 = villeArrivee.getY(); 
+    
+            g.setColor(Color.BLACK);
+            g.drawLine(x1, y1, x2, y2);
+        }
         // Dessiner ville
         for (Ville ville : villeList )
         {
