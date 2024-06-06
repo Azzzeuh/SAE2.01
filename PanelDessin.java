@@ -76,7 +76,41 @@ public class PanelDessin extends JPanel implements ActionListener, MouseListener
             Ville villeDepart = route.getVilleDepart();
             Ville villeArrivee = route.getVilleArriver();
             g.setColor(Color.BLACK);
-            g.drawLine(villeDepart.getX(), villeDepart.getY(), villeArrivee.getX(), villeArrivee.getY());
+
+            int nbTroncons = route.getNbTroncons();
+            int espace = 10;
+		
+            int x1 = villeDepart.getX();
+            int y1 = villeDepart.getY();
+            int x2 = villeArrivee.getX();
+            int y2 = villeArrivee.getY();
+
+            double distanceTotale = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+            double longueurTotale = nbTroncons * 10 + (nbTroncons - 1) * espace;
+
+            // Si la longueur totale des segments et des espaces dépasse la distance totale
+            if (longueurTotale > distanceTotale) 
+            {
+                g.drawLine(x1, y1, x2, y2);
+            }
+
+            else
+            {
+                double longueurSegment = (distanceTotale - (nbTroncons - 1) * espace) / nbTroncons;
+
+                for (int i = 0; i < nbTroncons; i++) 
+                {
+                    double t1 = (i * (longueurSegment + espace)) / distanceTotale;
+                    double t2 = ((i * (longueurSegment + espace)) + longueurSegment) / distanceTotale;
+
+                    int x1Segment = (int) (x1 + t1 * (x2 - x1));
+                    int y1Segment = (int) (y1 + t1 * (y2 - y1));
+                    int x2Segment = (int) (x1 + t2 * (x2 - x1));
+                    int y2Segment = (int) (y1 + t2 * (y2 - y1));
+
+                    g.drawLine(x1Segment, y1Segment, x2Segment, y2Segment);
+                }
+            }
         }
 
         // Dessiner ville
