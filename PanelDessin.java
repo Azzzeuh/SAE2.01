@@ -121,6 +121,7 @@ public class PanelDessin extends JPanel implements ActionListener, MouseListener
             g.setColor(Color.BLACK);
             g.drawOval(ville.getX() - 13, ville.getY() - 13, 26, 26);
             g.drawString(ville.getNom(), ville.getX() - 16, ville.getY() - 25);
+		g.drawString("x: " + ville.getX() + " y: " + ville.getY(), ville.getX() + 16, ville.getY() + 25);
         }
 
 	}
